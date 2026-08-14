@@ -1,36 +1,34 @@
 import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
+import { Manrope, Inter } from 'next/font/google';
+import Navbar from '@/components/site/Navbar';
+import Footer from '@/components/site/Footer';
+import { SITE } from '@/lib/site';
 import './globals.css';
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-poppins',
-  display: 'swap',
-});
+const manrope = Manrope({ subsets: ['latin'], weight: ['500', '600', '700'], variable: '--font-manrope', display: 'swap' });
+const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-inter', display: 'swap' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://siwd-foundation.vercel.app'),
-  title:
-    'Supporting Individuals With Disabilities Foundation | 501(c)(3) Nonprofit | Fernandina Beach FL',
-  description:
-    'A 501(c)(3) nonprofit creating accessible opportunities, education, and community for individuals with disabilities across Northeast Florida. Founded 2020 in Fernandina Beach.',
-  icons: { icon: '/images/logo-siwd.png' },
-  openGraph: {
-    title: 'Supporting Individuals With Disabilities Foundation',
-    description:
-      'A 501(c)(3) nonprofit creating accessible opportunities, education, and community for individuals with disabilities across Northeast Florida.',
-    images: ['/images/idf-community.jpg'],
-    type: 'website',
+  metadataBase: new URL('https://www.siwdinc.info'),
+  title: {
+    default: 'Supporting Individuals with Disabilities Foundation Inc. | 501(c)(3) Nonprofit',
+    template: '%s',
   },
+  description:
+    'Supporting Individuals with Disabilities Foundation Inc. is a 501(c)(3) nonprofit providing APD Waiver services, caregiver training and community resources in Yulee, FL.',
+  icons: { icon: '/images/logo-siwd.png' },
 };
 
-export const viewport = { themeColor: '#1C2D5A' };
+export const viewport = { themeColor: '#1e40af' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={poppins.variable}>
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="en" className={`${manrope.variable} ${inter.variable}`}>
+      <body className="bg-white font-sans text-brand-900 antialiased">
+        <Navbar />
+        <main id="main">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

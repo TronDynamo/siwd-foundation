@@ -13,7 +13,7 @@ export default function DonateCta({ className = '' }: { className?: string }) {
       </p>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         <Button asChild variant="white">
-          <Link href="/projects#donate">
+          <Link href="/contact">
             <Heart className="h-4 w-4" aria-hidden="true" />
             Donate Now
           </Link>

@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import ResourceLinks from '@/components/site/ResourceLinks';
-import Sponsors from '@/components/site/Sponsors';
 import { SITE, FOOD_RESOURCES, PARTNER_ROWS } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -89,7 +88,7 @@ export default function HomePage() {
               </Link>
             </Button>
             <Button asChild variant="donate" size="lg">
-              <Link href="/projects#donate">
+              <Link href="/contact">
                 <Heart className="h-4 w-4" aria-hidden="true" />
                 Donate
               </Link>
@@ -232,9 +231,6 @@ export default function HomePage() {
           </ul>
         </div>
       </section>
-
-      {/* Our Sponsors — sits directly above the footer */}
-      <Sponsors />
 
       <ResourceLinks />
     </>

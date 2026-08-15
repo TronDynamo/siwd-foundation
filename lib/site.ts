@@ -23,6 +23,7 @@ export const SITE = {
   phone: '904-507-9976',
   phoneHref: 'tel:+19045079976',
   email: 'Jfreeman@siwdinc.net',
+  emailHref: 'mailto:Jfreeman@siwdinc.net',
   address: {
     line1: '95129 Springhill Rd',
     city: 'Fernandina Beach',
@@ -68,6 +69,7 @@ export const RESOURCE_LINKS: ResourceLink[] = [
   { label: 'CMS', href: 'https://cms.gov' },
   { label: 'Qlarant', href: 'https://florida.qlarant.com' },
   { label: 'Social Security', href: 'https://ssa.gov' },
+  { label: 'The Arc Nassau', href: 'https://thearcnassau.org' },
 ];
 
 export type Course = {
@@ -279,11 +281,7 @@ export const FOOD_RESOURCES: FoodResourceGroup[] = [
         detail: '85971 Harts Rd. · Food pantry open Mondays, 1–4 p.m.',
         phone: '904-225-5128',
       },
-    ],
-  },
-  {
-    city: 'Fernandina Beach',
-    items: [
+
       {
         name: 'Barnabas Center Food Giveaway',
         detail:

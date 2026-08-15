@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import DonateCta from '@/components/site/DonateCta';
 import ResourceLinks from '@/components/site/ResourceLinks';
+import Sponsors from '@/components/site/Sponsors';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -172,6 +173,9 @@ export default function AboutPage() {
           <DonateCta />
         </div>
       </section>
+
+      {/* Our Sponsors — moved here from the Home page */}
+      <Sponsors />
 
       <ResourceLinks />
     </>

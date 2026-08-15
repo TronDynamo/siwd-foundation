@@ -115,7 +115,7 @@ export default function HalloweenBashPage() {
         <div className="overflow-hidden rounded-2xl bg-black">
           <div className="relative aspect-[980/733] w-full">
             <Image
-              src="/images/halloween-banner.jpg"
+              src="/images/halloween-invite.jpg"
               alt="You're invited to SIWD Foundation Halloween Bash — a carved jack-o'-lantern with glowing green lettering."
               fill
               priority
@@ -213,7 +213,7 @@ export default function HalloweenBashPage() {
               className="mt-7 w-full text-white hover:opacity-90"
               style={{ backgroundColor: DEEP_ORANGE }}
             >
-              <Link href="/projects#donate">Donate to Our Cause</Link>
+              <Link href="/contact">Donate to Our Cause</Link>
             </Button>
             <p className="mt-3 text-center text-sm opacity-75">{SITE.taxNote}</p>
           </div>

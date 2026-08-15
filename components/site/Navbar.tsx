@@ -132,7 +132,7 @@ export default function Navbar() {
 
           <div className="flex shrink-0 items-center gap-2.5">
             <Button asChild variant="donate" size="sm" className="hidden sm:inline-flex">
-              <Link href="/projects#donate">
+              <Link href="/contact">
                 <Heart className="h-4 w-4" aria-hidden="true" />
                 Donate
               </Link>
@@ -174,7 +174,7 @@ export default function Navbar() {
 
           <div className="space-y-3 border-t border-hairline px-4 py-5">
             <Button asChild variant="donate" className="w-full">
-              <Link href="/projects#donate">
+              <Link href="/contact">
                 <Heart className="h-4 w-4" aria-hidden="true" />
                 Donate
               </Link>

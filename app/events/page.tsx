@@ -25,8 +25,8 @@ const EVENTS = [
     spotsLeft: '50 spots left',
     blurb:
       'Our annual costume party for the special needs community and their families — games, music, food and prizes for best costume.',
-    image: '/images/photo-album-banner.jpg',
-    alt: 'A wide view of an SIWD community event at the ballfield in the evening.',
+    image: '/images/halloween-invite.jpg',
+    alt: "You're invited to SIWD Foundation Halloween Bash — a carved jack-o'-lantern invitation.",
   },
   {
     title: 'Community Softball Night',
@@ -87,7 +87,7 @@ export default function EventsPage() {
             {EVENTS.map((e) => (
               <Card key={e.title} className="group flex flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lift">
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  <Image src={e.image} alt={e.alt} fill loading="lazy" sizes="(max-width: 768px) 100vw, 380px" className="rounded-t-2xl object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Image src={e.image} alt={e.alt} fill loading="lazy" sizes="(max-width: 768px) 100vw, 380px" className="rounded-t-2xl object-contain bg-black p-2 transition-transform duration-700 group-hover:scale-105" />
                   <Badge variant="warning" className="absolute left-4 top-4">
                     {e.status}
                   </Badge>

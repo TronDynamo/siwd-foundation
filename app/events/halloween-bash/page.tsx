@@ -1,180 +1,97 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function HalloweenBash() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
+export default function HalloweenBashPage() {
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  
   useEffect(() => {
-    const handleMouse = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouse);
-    return () => window.removeEventListener("mousemove", handleMouse);
+    const handleMove = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-[#ff4500] relative overflow-hidden">
-      {/* Floating skulls */}
-      <div className="absolute top-20 left-[8%] text-3xl animate-bounce" style={{ animationDuration: "2s" }}>💀</div>
-      <div className="absolute top-20 right-[8%] text-2xl animate-bounce" style={{ animationDuration: "2.5s" }}>☠️</div>
-      <div className="absolute top-[65%] right-[12%] text-xl animate-bounce" style={{ animationDuration: "3s" }}>🦴</div>
-      <div className="absolute bottom-[20%] left-[10%] text-2xl animate-bounce" style={{ animationDuration: "2.2s" }}>💀</div>
-
-      {/* FIXED PUMPKINS - NO BOXES, JUST GLOW */}
-      <div className="flex justify-center gap-16 pt-8">
-        {/* Pumpkin 1 */}
-        <div className="relative group cursor-pointer">
-          <div className="absolute inset-0 blur-[25px] bg-yellow-300/50 rounded-full scale-110 animate-pulse"></div>
-          <div className="relative text-[95px] leading-none filter drop-shadow-[0_0_15px_rgba(255,200,0,0.8)] animate-[flicker_0.15s_infinite_alternate] select-none">
-            🎃
-            {/* Eyes that follow mouse */}
-            <div className="absolute top-[38%] left-[30%] flex gap-4">
-              <div className="w-3 h-5 bg-black rounded-full relative overflow-hidden shadow-[0_0_8px_black]">
+    <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-hidden">
+      {/* Transparent pumpkins - NO background boxes */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {[
+          { top: "10%", left: "8%", size: 80, delay: "0s" },
+          { top: "60%", left: "5%", size: 100, delay: "0.5s" },
+          { top: "20%", left: "85%", size: 90, delay: "1s" },
+          { top: "75%", left: "80%", size: 110, delay: "1.5s" },
+          { top: "45%", left: "92%", size: 70, delay: "0.2s" },
+          { top: "5%", left: "50%", size: 60, delay: "0.8s" },
+        ].map((p, i) => {
+          // eye tracking
+          const eyeX = (mouse.x / (typeof window !== 'undefined' ? window.innerWidth : 1000) - 0.5) * 4;
+          const eyeY = (mouse.y / (typeof window !== 'undefined' ? window.innerHeight : 1000) - 0.5) * 3;
+          return (
+            <div
+              key={i}
+              className="absolute select-none"
+              style={{
+                top: p.top,
+                left: p.left,
+                fontSize: `${p.size}px`,
+                animation: `float 3s ease-in-out infinite`,
+                animationDelay: p.delay,
+                filter: "drop-shadow(0 0 20px rgba(255,140,0,0.6))",
+                lineHeight: 1,
+                background: "transparent",
+              }}
+            >
+              <div className="relative" style={{ background: "transparent" }}>
+                <span style={{ background: "transparent" }}>🎃</span>
+                {/* glowing eyes that follow mouse - overlayed on pumpkin */}
                 <div 
-                  className="w-1.5 h-1.5 bg-white rounded-full absolute"
-                  style={{
-                    left: `${50 + (mousePos.x / (typeof window !== 'undefined' ? window.innerWidth : 1920) * 30 - 15)}%`,
-                    top: `${50 + (mousePos.y / (typeof window !== 'undefined' ? window.innerHeight : 1080) * 30 - 15)}%`,
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                />
-              </div>
-              <div className="w-3 h-5 bg-black rounded-full relative overflow-hidden shadow-[0_0_8px_black]">
-                <div 
-                  className="w-1.5 h-1.5 bg-white rounded-full absolute"
-                  style={{
-                    left: `${50 + (mousePos.x / (typeof window !== 'undefined' ? window.innerWidth : 1920) * 30 - 15)}%`,
-                    top: `${50 + (mousePos.y / (typeof window !== 'undefined' ? window.innerHeight : 1080) * 30 - 15)}%`,
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                />
+                  className="absolute top-[42%] left-[50%] -translate-x-1/2 flex gap-[18%] pointer-events-none"
+                  style={{ transform: `translate(-50%, -50%) translate(${eyeX}px, ${eyeY}px)` }}
+                >
+                  <div className="w-2 h-2 bg-yellow-300 rounded-full shadow-[0_0_8px_yellow] animate-pulse"></div>
+                  <div className="w-2 h-2 bg-yellow-300 rounded-full shadow-[0_0_8px_yellow] animate-pulse"></div>
+                </div>
+                {/* inner candle glow */}
+                <div className="absolute inset-0 bg-orange-500/20 blur-[12px] -z-10 rounded-full animate-pulse"></div>
               </div>
             </div>
-          </div>
-          {/* Candle glow inside */}
-          <div className="absolute top-[55%] left-1/2 -translate-x-1/2 w-8 h-8 bg-yellow-200 blur-[8px] rounded-full animate-[flicker_0.1s_infinite] -z-10"></div>
-        </div>
-
-        {/* Pumpkin 2 */}
-        <div className="relative group cursor-pointer">
-          <div className="absolute inset-0 blur-[25px] bg-orange-300/50 rounded-full scale-110 animate-pulse" style={{ animationDelay: "0.5s" }}></div>
-          <div className="relative text-[95px] leading-none filter drop-shadow-[0_0_15px_rgba(255,160,0,0.8)] animate-[flicker_0.18s_infinite_alternate] select-none" style={{ animationDelay: "0.2s" }}>
-            🎃
-            <div className="absolute top-[38%] left-[30%] flex gap-4">
-              <div className="w-3 h-5 bg-black rounded-full relative overflow-hidden rotate-3">
-                <div 
-                  className="w-1.5 h-1.5 bg-yellow-100 rounded-full absolute"
-                  style={{
-                    left: `${50 + (mousePos.x / (typeof window !== 'undefined' ? window.innerWidth : 1920) * 30 - 15)}%`,
-                    top: `${50 + (mousePos.y / (typeof window !== 'undefined' ? window.innerHeight : 1080) * 30 - 15)}%`,
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                />
-              </div>
-              <div className="w-3 h-5 bg-black rounded-full relative overflow-hidden -rotate-3">
-                <div 
-                  className="w-1.5 h-1.5 bg-yellow-100 rounded-full absolute"
-                  style={{
-                    left: `${50 + (mousePos.x / (typeof window !== 'undefined' ? window.innerWidth : 1920) * 30 - 15)}%`,
-                    top: `${50 + (mousePos.y / (typeof window !== 'undefined' ? window.innerHeight : 1080) * 30 - 15)}%`,
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="absolute top-[55%] left-1/2 -translate-x-1/2 w-8 h-8 bg-yellow-200 blur-[8px] rounded-full animate-[flicker_0.12s_infinite] -z-10"></div>
-        </div>
-      </div>
-
-      {/* Hero Text */}
-      <div className="max-w-6xl mx-auto px-6 pt-6 pb-20">
-        <div className="inline-flex items-center gap-2 bg-black text-orange-300 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest border border-orange-400/50 mb-4">
-          🎃 SPOOKY SEASON • 50 SPOTS LEFT • SENSORY-FRIENDLY 👻
-        </div>
-
-        <h1 className="text-5xl md:text-7xl font-black leading-[0.9] tracking-tighter">
-          <span className="block text-black" style={{ fontFamily: "'Creepster', cursive", textShadow: "3px 3px 0px white, 5px 5px 0px orange" }}>HALLOWEEN</span>
-          <span className="block text-white" style={{ WebkitTextStroke: "2px black", textShadow: "4px 4px 0px black" }}>BASH</span>
-        </h1>
-
-        <div className="mt-6 max-w-[420px] bg-[#e0f7ff] border-[3px] border-black rounded-2xl p-4 shadow-[6px_6px_0px_black]">
-          <p className="text-[15px] leading-tight font-medium text-black">
-            Costumes, games, music, food + prizes for best costume. Everyone welcome. Every ability belongs.<br/>
-            <span className="bg-black text-white px-2 py-0.5 rounded text-[13px] font-bold">No jump scares.</span>
-          </p>
-        </div>
-
-        <div className="mt-4 flex gap-3">
-          <div className="bg-black text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 border-2 border-black">
-            ⚠️ Registration Closed
-          </div>
-          <a href="/contact" className="bg-[#e0f7ff] border-[2px] border-black px-4 py-2 rounded-full text-sm font-bold text-black shadow-[3px_3px_0px_black] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_black] transition-all">
-            Contact Us 🎃
-          </a>
-        </div>
-      </div>
-
-      {/* Dancing border */}
-      <div className="absolute bottom-0 left-0 right-0 h-10 bg-black border-t-2 border-orange-400 flex items-center overflow-hidden">
-        <div className="flex gap-8 animate-[marquee_15s_linear_infinite] whitespace-nowrap text-white text-sm">
-          <span>💀</span><span>🦴</span><span>🎃</span><span>👻</span><span>🏚️</span><span>💀</span><span>🦴</span><span>🎃</span><span>👻</span><span>🏚️</span><span>💀</span><span>🦴</span><span>🎃</span><span>👻</span><span>🏚️</span><span>💀</span><span>🦴</span><span>🎃</span><span>👻</span><span>🏚️</span>
-        </div>
-      </div>
-
-      {/* Lower sections - keep your existing content but with halloween theme */}
-      <div className="bg-[#0f2430] pt-12 pb-20 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bg-[#1a3444] border-2 border-orange-400/50 rounded-2xl p-6 shadow-[0_0_20px_rgba(255,100,0,0.2)]">
-            <h2 className="text-orange-400 font-black text-xl tracking-wide mb-3">ABOUT THE SPOOK-TACULAR NIGHT</h2>
-            <p className="text-white/90 text-sm leading-relaxed">
-              Our Annual Halloween Bash is THE night of the year. Sensory-friendly, fully inclusive, built for all abilities. We got dancing skeletons, glowing pumpkins with real candle flicker, games, music, food trucks and trophies for best costumes.
-            </p>
-            <div className="grid grid-cols-3 gap-3 mt-5">
-              <div className="bg-gradient-to-br from-purple-500 to-orange-400 rounded-xl p-3 text-center">
-                <div className="text-2xl">💀</div>
-                <div className="text-[11px] font-bold mt-1">Skeleton Dance Off</div>
-              </div>
-              <div className="bg-gradient-to-br from-orange-400 to-yellow-300 rounded-xl p-3 text-center">
-                <div className="text-2xl">🎃</div>
-                <div className="text-[11px] font-bold mt-1">Glowing Pumpkins</div>
-              </div>
-              <div className="bg-gradient-to-br from-black to-orange-700 rounded-xl p-3 text-center text-white">
-                <div className="text-2xl">🍬</div>
-                <div className="text-[11px] font-bold mt-1">Trick or Treat</div>
-              </div>
-            </div>
-            <div className="mt-4 bg-black rounded-xl p-3 flex gap-3 items-center border border-white/10">
-              <div className="text-xl">🕯️</div>
-              <div className="text-[11px] text-white/80">
-                <span className="text-white font-bold">Candle-lit pumpkin faces that actually move & watch you...</span><br/>Hover over the pumpkins above if you dare 👀
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-[#ff8c5a] rounded-2xl p-5 border-2 border-black shadow-[4px_4px_0px_black]">
-            <div className="font-black text-sm mb-3 flex items-center gap-2">EVENT DETAILS 👻</div>
-            <div className="bg-[#e0f7ff] rounded-xl p-3 text-[12px] leading-relaxed border-2 border-black">
-              <div>📅 Date: TBA - Spooky Season</div>
-              <div>📍 95128 Springhill Rd, Fernandina Beach</div>
-              <div>🕕 6PM - 9PM • Sensory Friendly</div>
-            </div>
-            <div className="mt-3 bg-black text-white text-[11px] font-bold px-3 py-1.5 rounded-full inline-flex">🎃 50 SPOTS LEFT</div>
-          </div>
-        </div>
+          );
+        })}
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
-        @keyframes flicker {
-          0% { opacity: 1; filter: brightness(1) drop-shadow(0 0 15px rgba(255,200,0,0.8)); }
-          100% { opacity: 0.85; filter: brightness(1.2) drop-shadow(0 0 20px rgba(255,200,0,1)); }
-        }
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(-1deg); }
+          50% { transform: translateY(-12px) rotate(1deg); }
         }
       `}</style>
+
+      {/* Content */}
+      <div className="relative z-10 pt-24 pb-20 px-6 max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-block bg-orange-500 text-black font-black px-4 py-1 rounded-full text-sm mb-4 border-2 border-black">ALL ABILITIES WELCOME</div>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-4">HALLOWEEN<br/>BASH</h1>
+          <p className="text-xl text-orange-200">Costumes • Games • Music • Food • No jump scares • Just fun</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white text-black rounded-[20px] border-[3px] border-black p-6 shadow-[6px_6px_0px_black]">
+            <h3 className="font-black text-xl mb-2">👻 What to Expect</h3>
+            <ul className="text-sm font-medium space-y-1">
+              <li>• Best costume contest with prizes</li>
+              <li>• Sensory-friendly games</li>
+              <li>• Food, drinks, music</li>
+              <li>• Safe space, no scary stuff</li>
+            </ul>
+          </div>
+          <div className="bg-orange-400 text-black rounded-[20px] border-[3px] border-black p-6 shadow-[6px_6px_0px_black]">
+            <h3 className="font-black text-xl mb-2">📅 Details</h3>
+            <p className="text-sm font-bold">Date: TBA - Spooky Season<br/>Time: TBA<br/>Location: TBA<br/>50 Spots Available</p>
+            <button className="mt-4 w-full bg-black text-white font-black py-3 rounded-full border-2 border-black hover:bg-white hover:text-black transition-colors">RESERVE SPOT - FREE</button>
+          </div>
+        </div>
+
+        <div className="mt-8 text-center text-[11px] opacity-60">🎃 The pumpkins are watching your mouse... move around!</div>
+      </div>
     </div>
   );
 }

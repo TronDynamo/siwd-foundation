@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SITE } from '@/lib/site';
+import GlowingPumpkin from '@/components/halloween/GlowingPumpkin';
+import FlyingBats from '@/components/halloween/FlyingBats';
 
 export const metadata: Metadata = {
   title: 'Annual Halloween Bash | SIWD Foundation - 501(c)(3) Nonprofit',
@@ -41,9 +43,25 @@ const TIERS = [
 
 export default function HalloweenBashPage() {
   return (
-    <div style={{ backgroundColor: CREAM, color: INK }} className="overflow-x-hidden">
+    <div
+      style={{ backgroundColor: CREAM, color: INK }}
+      className="relative isolate overflow-x-hidden"
+    >
+      {/* subtle orange fog glow behind everything */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at center, rgba(255,107,0,0.15) 0%, transparent 70%)',
+        }}
+      />
+
+      {/* bats drift across the whole section, behind the content */}
+      <FlyingBats />
+
       {/* ===================== HEADER STRIP ===================== */}
-      <section className="mx-auto w-full max-w-6xl px-4 pt-12 sm:pt-16">
+      <section className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-12 sm:pt-16">
         <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
           {/* TRICK OR TREAT badge, top left */}
           <div
@@ -57,13 +75,15 @@ export default function HalloweenBashPage() {
             </p>
           </div>
 
-          <div className="min-w-0">
+          <div className="flex min-w-0 flex-1 items-center gap-4 sm:gap-6">
+            <GlowingPumpkin delay="0s" />
             <h1
-              className="break-words font-display text-3xl font-extrabold uppercase leading-[1.08] tracking-tight sm:text-4xl lg:text-5xl"
+              className="min-w-0 break-words font-display text-3xl font-extrabold uppercase leading-[1.08] tracking-tight sm:text-4xl lg:text-5xl"
               style={{ color: DEEP_ORANGE }}
             >
               Ghouls, Giggles &amp; Good Times for Everyone!
             </h1>
+            <GlowingPumpkin flip delay="1.5s" className="hidden sm:inline-block" />
           </div>
         </div>
 
@@ -111,7 +131,7 @@ export default function HalloweenBashPage() {
       </section>
 
       {/* ================= CENTER BLACK BANNER ================= */}
-      <section className="mx-auto mt-14 w-full max-w-6xl px-4">
+      <section className="relative z-10 mx-auto mt-14 w-full max-w-6xl px-4">
         <div className="overflow-hidden rounded-2xl bg-black">
           <div className="relative aspect-[980/733] w-full">
             <Image
@@ -127,7 +147,7 @@ export default function HalloweenBashPage() {
       </section>
 
       {/* ============ VOLUNTEER (left) + DONATE (right) ============ */}
-      <section className="mx-auto mt-14 w-full max-w-6xl px-4 pb-16 sm:pb-20">
+      <section className="relative z-10 mx-auto mt-14 w-full max-w-6xl px-4 pb-16 sm:pb-20">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* ---- volunteer ---- */}
           <div className="flex h-full flex-col rounded-2xl bg-white/70 p-7 sm:p-8">

@@ -37,8 +37,17 @@ export default function BookOnlinePage() {
             {COURSES.map((c) => (
               <Card key={c.slug} className="overflow-hidden">
                 <div className="grid grid-cols-1 md:grid-cols-5">
-                  <div className="relative aspect-[4/3] w-full overflow-hidden md:col-span-2 md:aspect-auto">
-                    <Image src={c.image} alt={c.alt} fill loading="lazy" sizes="(max-width: 768px) 100vw, 400px" className="object-cover" />
+                  {/* aspect-[16/9] + object-contain: wide course graphics keep their
+                      full width, so the BBP wordmark can't be cropped on the left. */}
+                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-slate-100 md:col-span-2">
+                    <Image
+                      src={c.image}
+                      alt={c.alt}
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      className="object-contain object-center p-2"
+                    />
                   </div>
                   <div className="md:col-span-3">
                     <CardHeader>

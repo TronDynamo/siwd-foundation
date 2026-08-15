@@ -27,19 +27,28 @@ const POSITIONS = [
 export default function EmploymentPage() {
   return (
     <>
-      <section aria-labelledby="employment-heading" className="relative isolate flex min-h-[100svh] items-center overflow-hidden pt-[72px] lg:pt-20">
+      <section
+        aria-labelledby="employment-heading"
+        className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden py-16"
+      >
+        {/* Background: object-cover object-center at natural scale — no zoom. */}
         <Image
-          src="/images/employment-dream-sign.jpg"
-          alt="A wooden signpost reading Dream against a bright blue sky with scattered clouds."
+          src="/employment-bg.jpg"
+          alt=""
           fill
           priority
+          quality={100}
           sizes="100vw"
-          className="-z-20 object-cover"
+          className="-z-20 object-cover object-center"
         />
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-brand-900/40" />
+        {/* Readability layer behind the form card */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-black/40 backdrop-blur-sm"
+        />
 
-        <div className="mx-auto w-full max-w-2xl px-4 py-16 lg:px-8">
-          <div className="rounded-2xl bg-white p-8 shadow-lift lg:p-10">
+        <div className="mx-auto w-full max-w-md px-4">
+          <div className="rounded-2xl bg-white p-6 shadow-lift sm:p-8">
             <h1 id="employment-heading" className="text-center font-display text-3xl font-semibold tracking-tight text-brand-900 lg:text-4xl">
               Application for Employment
             </h1>
@@ -49,7 +58,7 @@ export default function EmploymentPage() {
             </p>
 
             <form action={SITE.formspree} method="POST" className="mt-8 space-y-6">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-5">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
                   <Input id="firstName" name="firstName" type="text" autoComplete="given-name" required />

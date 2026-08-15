@@ -20,10 +20,20 @@ export const metadata: Metadata = {
 export default function HivBbpPage() {
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-brand-900 pt-[72px] lg:pt-20">
-        <Image src={course.image} alt={course.alt} fill priority sizes="100vw" className="-z-20 object-cover" />
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-brand-900/80" />
-        <div className="mx-auto max-w-content px-4 py-16 lg:px-8 lg:py-20">
+      {/* Hero: fixed 400px so the image can never stretch to an unbounded box.
+          Source is /public/training-hero.jpg (1920x1080). No scale/zoom transform. */}
+      <section className="relative isolate h-[400px] overflow-hidden bg-brand-900">
+        <Image
+          src="/training-hero.jpg"
+          alt=""
+          fill
+          priority
+          quality={100}
+          sizes="100vw"
+          className="-z-20 object-cover object-top"
+        />
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-900/85 to-blue-700/70" />
+        <div className="mx-auto flex h-full max-w-content flex-col justify-center px-4 lg:px-8">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/60">
             <Link href="/training" className="underline-offset-4 hover:text-white hover:underline">
               Training

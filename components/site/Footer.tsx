@@ -149,8 +149,14 @@ export default function Footer() {
 
         <p className="mt-6 text-center text-xs text-neutral-400">
           Website by{' '}
-          <a href="#" className="underline-offset-4 transition-colors duration-300 hover:text-neutral-200 hover:underline">
+          <a
+            href="https://raptorzax.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-4 transition-colors duration-300 hover:text-neutral-200 hover:underline"
+          >
             Zacharee J. Burchfield
+            <span className="sr-only">(opens in a new tab)</span>
           </a>{' '}
           &mdash;{' '}
           <a href="tel:+19045839741" className="underline-offset-4 transition-colors duration-300 hover:text-neutral-200 hover:underline">

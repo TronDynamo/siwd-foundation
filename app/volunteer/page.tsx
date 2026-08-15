@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { LifeBuoy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -49,6 +50,23 @@ export default function VolunteerPage() {
               you&rsquo;re not just giving your time&mdash;you&rsquo;re joining a caring, supportive
               family committed to making the impossible possible.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== VOLUNTEER PHOTO ===================== */}
+      <section aria-hidden="true" className="bg-brand-50 pb-16 lg:pb-20">
+        <div className="mx-auto max-w-content px-4 lg:px-8">
+          <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl shadow-lift sm:aspect-[16/7]">
+            <Image
+              src="/images/volunteer-hero.jpg"
+              alt="SIWD Foundation volunteers in blue shirts holding up letters spelling VOLUNTEER."
+              fill
+              priority
+              quality={95}
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              className="object-cover object-center"
+            />
           </div>
         </div>
       </section>

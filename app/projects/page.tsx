@@ -17,25 +17,31 @@ export const metadata: Metadata = {
 export default function ProjectsPage() {
   return (
     <>
-      <section aria-labelledby="projects-heading" className="relative isolate flex min-h-[56vh] items-center overflow-hidden bg-brand-900 pt-[72px] lg:pt-20">
-        <Image
-          src="/images/foundation-canopy.jpg"
-          alt="Sunlight breaking through the canopy of a green forest."
-          fill
-          priority
-          sizes="100vw"
-          className="-z-20 object-cover"
-        />
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-brand-900/55" />
+      {/* ===================== HERO =====================
+          Background image lives at /public/tree-hero-new.jpg
+          To swap it, drop a new file at that exact path — no code change needed.
+          bg-cover + bg-center keeps it filling the box at every screen size;
+          the bg-black/40 layer is what makes the white text pop. */}
+      <section
+        aria-labelledby="projects-heading"
+        className="relative isolate flex min-h-[56vh] items-center justify-center overflow-hidden bg-brand-900 bg-[url('/tree-hero-new.jpg')] bg-cover bg-center"
+      >
+        {/* darkening overlay */}
+        <div aria-hidden="true" className="absolute inset-0 bg-black/40" />
 
-        <div className="mx-auto w-full max-w-content px-4 py-16 text-center lg:px-8">
-          <h1 id="projects-heading" className="font-display text-5xl font-semibold tracking-tight text-white lg:text-7xl">
+        <div className="relative z-10 mx-auto w-full max-w-content px-4 py-20 text-center lg:px-8">
+          <h1
+            id="projects-heading"
+            className="font-display text-4xl font-semibold tracking-tight text-white drop-shadow-sm sm:text-5xl lg:text-6xl"
+          >
             SIWD Foundation
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl rounded-lg bg-teal-500/80 px-4 py-3 text-lg font-medium leading-relaxed text-white">
-            Together we can break the barriers, nurture potential, and create a world where no dream is out of reach.
-            Your support helps us make the impossible possible, one life at a time
+
+          <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed text-white drop-shadow-sm sm:text-xl">
+            Together we can break the barriers, nurture potential, and create a world where no dream
+            is out of reach. Your support helps us make the impossible possible, one life at a time
           </p>
+
           <Button asChild variant="teal" className="mt-8">
             <Link href="/about">
               About Us

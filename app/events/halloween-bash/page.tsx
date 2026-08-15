@@ -1,195 +1,235 @@
-"use client";
-import { useState, useRef } from "react";
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { SITE } from '@/lib/site';
 
-export default function HalloweenBash() {
-  const [form, setForm] = useState({ name: "", email: "", guests: "1", note: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const formRef = useRef<HTMLDivElement>(null);
+export const metadata: Metadata = {
+  title: 'Annual Halloween Bash | SIWD Foundation - 501(c)(3) Nonprofit',
+  description:
+    "Ghouls, giggles & good times for everyone! SIWD Foundation's FREE sensory-friendly Halloween Bash — October 31st, 4PM-9PM at the Callahan Fairgrounds Multipurpose Building.",
+};
 
-  const scrollToForm = () => {
-    formRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+/* Palette lifted from the old Wix page so this reads as the same event. */
+const CREAM = '#F7E7C8';
+const ORANGE = '#E8791F';
+const DEEP_ORANGE = '#C2560F';
+const INK = '#2B1A08';
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("sending");
-    try {
-      const res = await fetch("https://formspree.io/f/mrpzkqjw", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          guests: form.guests,
-          message: `Halloween Bash Reservation - ${form.guests} guests. Note: ${form.note}`,
-          _subject: `NEW Halloween Bash RSVP: ${form.name} - ${form.guests} guests`,
-        }),
-      });
-      if (res.ok) {
-        setStatus("sent");
-        setForm({ name: "", email: "", guests: "1", note: "" });
-      } else {
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    }
-  };
+const HIGHLIGHTS = [
+  'Candy & Treats',
+  'Sensory-Friendly Activities',
+  'Costume Contests & Games',
+  'Prizes',
+  'Music',
+  'Surprises',
+];
 
+const VOLUNTEER_ROLES = [
+  { title: 'Game Hosts', body: 'Run a station, keep it welcoming, help players who need a hand.' },
+  { title: 'Treat Table', body: 'Keep the trick-or-treat stations stocked and greet every family.' },
+  { title: 'Set-Up Crew', body: 'Arrive early to build the space, or stay late to pack it down.' },
+  { title: 'Costume Judges', body: 'Score the contests and make sure every entrant is celebrated.' },
+];
+
+const TIERS = [
+  { amount: '$25', body: 'Stocks a trick-or-treat station for the evening.' },
+  { amount: '$50', body: 'Supplies prizes for a costume contest category.' },
+  { amount: '$100', body: 'Funds a full activity station, start to finish.' },
+  { amount: '$250', body: 'Underwrites the sensory-friendly quiet space.' },
+];
+
+export default function HalloweenBashPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-hidden">
-      {/* FLYING BATS */}
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="bat bat1">🦇</div>
-        <div className="bat bat2">🦇</div>
-        <div className="bat bat3">🦇</div>
-        <div className="bat bat4">🦇</div>
-      </div>
-
-      <style>{`
-        .bat { position: absolute; font-size: 28px; animation: fly linear infinite; }
-        .bat1 { top: 15%; animation-duration: 9s; animation-delay: 0s; }
-        .bat2 { top: 35%; animation-duration: 12s; animation-delay: 2s; }
-        .bat3 { top: 55%; animation-duration: 10s; animation-delay: 1s; }
-        .bat4 { top: 75%; animation-duration: 14s; animation-delay: 3s; }
-        @keyframes fly {
-          0% { left: -10%; transform: translateY(0px) rotate(0deg); }
-          25% { transform: translateY(-20px) rotate(10deg); }
-          50% { transform: translateY(10px) rotate(-10deg); }
-          75% { transform: translateY(-15px) rotate(5deg); }
-          100% { left: 110%; transform: translateY(0px) rotate(0deg); }
-        }
-        .skeleton { display: inline-block; animation: dance 0.6s ease-in-out infinite alternate; }
-        .skeleton:nth-child(2) { animation-delay: 0.1s; }
-        .skeleton:nth-child(3) { animation-delay: 0.2s; }
-        @keyframes dance {
-          0% { transform: translateY(0) rotate(-5deg); }
-          100% { transform: translateY(-12px) rotate(5deg); }
-        }
-        /* NO GLOW - clean pumpkin */
-        .pumpkin-clean { filter: none !important; box-shadow: none !important; text-shadow: none !important; }
-      `}</style>
-
-      {/* HERO */}
-      <section className="relative z-10 px-6 py-20 text-center">
-        <div className="text-6xl mb-4">
-          <span className="skeleton">💀</span> <span className="skeleton">💀</span> <span className="skeleton">💀</span>
-        </div>
-
-        {/* PUMPKINS - NO ORANGE GLOW CIRCLE */}
-        <h1 className="text-5xl md:text-7xl font-black mb-6">
-          <span className="pumpkin-clean">🎃</span> HALLOWEEN BASH <span className="pumpkin-clean">🎃</span>
-        </h1>
-
-        <p className="text-xl text-orange-300 mb-8 max-w-2xl mx-auto">
-          SIWD Foundation&apos;s Spookiest Fundraiser of the Year! Costumes, Games, Prizes & Community Fun.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <button
-            onClick={scrollToForm}
-            className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-8 py-4 rounded-full text-lg transition"
+    <div style={{ backgroundColor: CREAM, color: INK }} className="overflow-x-hidden">
+      {/* ===================== HEADER STRIP ===================== */}
+      <section className="mx-auto w-full max-w-6xl px-4 pt-12 sm:pt-16">
+        <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+          {/* TRICK OR TREAT badge, top left */}
+          <div
+            className="shrink-0 rounded-full border-4 px-6 py-4 text-center"
+            style={{ borderColor: DEEP_ORANGE, backgroundColor: ORANGE }}
           >
-            RESERVE YOUR SPOT 🎃
-          </button>
-          <div className="bg-black/50 border border-orange-900 rounded-full px-6 py-4">
-            📅 Oct 31st • 5PM - 9PM • SIWD Foundation
+            <p className="font-display text-xl font-extrabold uppercase leading-none tracking-tight text-white sm:text-2xl">
+              Trick
+              <br />
+              or Treat
+            </p>
+          </div>
+
+          <div className="min-w-0">
+            <h1
+              className="break-words font-display text-3xl font-extrabold uppercase leading-[1.08] tracking-tight sm:text-4xl lg:text-5xl"
+              style={{ color: DEEP_ORANGE }}
+            >
+              Ghouls, Giggles &amp; Good Times for Everyone!
+            </h1>
           </div>
         </div>
 
-        {/* DANCING SKELETONS ROW */}
-        <div className="text-4xl space-x-4">
-          <span className="skeleton">💀</span>
-          <span className="skeleton">👻</span>
-          <span className="skeleton">💀</span>
-          <span className="skeleton">🧙</span>
-          <span className="skeleton">💀</span>
+        <p className="mt-8 max-w-3xl text-lg leading-relaxed sm:text-xl">
+          Join {SITE.legalName} for our{' '}
+          <strong className="font-bold">FREE sensory-friendly Halloween Bash</strong> — a night built
+          so that every child and adult, of every ability, gets to take part. No cost, no barriers,
+          and a quiet space available all evening for anyone who needs a break from the noise.
+        </p>
+
+        {/* details bar */}
+        <div
+          className="mt-8 flex flex-col gap-2 rounded-xl px-6 py-5 text-center font-display text-lg font-bold text-white sm:flex-row sm:items-center sm:justify-center sm:gap-4 sm:text-xl"
+          style={{ backgroundColor: DEEP_ORANGE }}
+        >
+          <span>October 31st</span>
+          <span aria-hidden="true" className="hidden sm:inline">
+            |
+          </span>
+          <span>4PM &ndash; 9PM</span>
+          <span aria-hidden="true" className="hidden sm:inline">
+            |
+          </span>
+          <span>Callahan Fairgrounds &mdash; Multipurpose Building</span>
+        </div>
+
+        {/* highlights */}
+        <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {HIGHLIGHTS.map((item) => (
+            <li
+              key={item}
+              className="flex items-center gap-3 rounded-lg bg-white/70 px-5 py-3.5 font-display text-[17px] font-bold"
+            >
+              <span
+                aria-hidden="true"
+                className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-white"
+                style={{ backgroundColor: ORANGE }}
+              >
+                ★
+              </span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* ================= CENTER BLACK BANNER ================= */}
+      <section className="mx-auto mt-14 w-full max-w-6xl px-4">
+        <div className="overflow-hidden rounded-2xl bg-black">
+          <div className="relative aspect-[980/733] w-full">
+            <Image
+              src="/images/halloween-banner.jpg"
+              alt="You're invited to SIWD Foundation Halloween Bash — a carved jack-o'-lantern with glowing green lettering."
+              fill
+              priority
+              sizes="(max-width: 1152px) 100vw, 1152px"
+              className="object-contain"
+            />
+          </div>
         </div>
       </section>
 
-      {/* GAME / INFO CARDS */}
-      <section className="relative z-10 px-6 py-10 max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
-        <div className="bg-zinc-900/80 border border-orange-900/30 p-6 rounded-2xl">
-          <div className="text-3xl mb-2">🎯</div>
-          <h3 className="font-bold text-lg mb-2">Costume Contest</h3>
-          <p className="text-zinc-400 text-sm">Best costume wins $100 prize! Judged by our community.</p>
-        </div>
-        <div className="bg-zinc-900/80 border border-orange-900/30 p-6 rounded-2xl">
-          <div className="text-3xl mb-2">🍬</div>
-          <h3 className="font-bold text-lg mb-2">Games & Treats</h3>
-          <p className="text-zinc-400 text-sm">Pumpkin toss, candy hunt, and spooky snacks for all ages.</p>
-        </div>
-        <div className="bg-zinc-900/80 border border-orange-900/30 p-6 rounded-2xl">
-          <div className="text-3xl mb-2">💜</div>
-          <h3 className="font-bold text-lg mb-2">Support SIWD</h3>
-          <p className="text-zinc-400 text-sm">All proceeds support individuals with disabilities.</p>
-        </div>
-      </section>
+      {/* ============ VOLUNTEER (left) + DONATE (right) ============ */}
+      <section className="mx-auto mt-14 w-full max-w-6xl px-4 pb-16 sm:pb-20">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          {/* ---- volunteer ---- */}
+          <div className="flex h-full flex-col rounded-2xl bg-white/70 p-7 sm:p-8">
+            <h2
+              className="break-words font-display text-2xl font-extrabold uppercase leading-tight tracking-tight sm:text-3xl"
+              style={{ color: DEEP_ORANGE }}
+            >
+              Be Part of the Magic &amp; Volunteer!
+            </h2>
+            <p className="mt-4 text-[17px] leading-relaxed">
+              The Bash runs on volunteers. Pick whichever role fits you — no experience needed, and
+              we will walk you through everything on the day.
+            </p>
 
-      {/* RESERVATION FORM - REAL FORMSPREE */}
-      <section ref={formRef} className="relative z-10 px-6 py-16 max-w-2xl mx-auto">
-        <div className="bg-white text-black rounded-[2rem] p-8 shadow-2xl">
-          <h2 className="text-3xl font-black text-center mb-2">RESERVE YOUR SPOT</h2>
-          <p className="text-center text-zinc-600 mb-6">Sends directly to Jfreeman@siwdinc.net</p>
-
-          {status === "sent" ? (
-            <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded-xl text-center">
-              <div className="text-4xl mb-2">🎃</div>
-              <div className="font-bold text-xl">Reserved!</div>
-              <div>Jfreeman has your spot - we&apos;ll see you there!</div>
-              <button onClick={() => setStatus("idle")} className="mt-4 text-sm underline">Reserve another</button>
+            {/* volunteer photo — REPLACE WITH NEW IMAGE HERE if you have the Wix signup graphics */}
+            <div className="relative mt-6 aspect-[3/2] w-full overflow-hidden rounded-xl">
+              <Image
+                src="/images/volunteers-group.jpg"
+                alt="A group of SIWD volunteers in matching shirts, arm in arm and smiling."
+                fill
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 520px"
+                className="object-cover"
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                required
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Your Full Name"
-                className="w-full p-4 rounded-xl border border-zinc-300 focus:border-orange-500 outline-none"
-              />
-              <input
-                required
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder="Your Email"
-                className="w-full p-4 rounded-xl border border-zinc-300 focus:border-orange-500 outline-none"
-              />
-              <select
-                value={form.guests}
-                onChange={(e) => setForm({ ...form, guests: e.target.value })}
-                className="w-full p-4 rounded-xl border border-zinc-300 focus:border-orange-500 outline-none"
-              >
-                <option value="1">1 Guest</option>
-                <option value="2">2 Guests</option>
-                <option value="3">3 Guests</option>
-                <option value="4">4 Guests</option>
-                <option value="5+">5+ Guests</option>
-              </select>
-              <textarea
-                value={form.note}
-                onChange={(e) => setForm({ ...form, note: e.target.value })}
-                placeholder="Costume idea or notes (optional)"
-                rows={3}
-                className="w-full p-4 rounded-xl border border-zinc-300 focus:border-orange-500 outline-none"
-              />
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="w-full bg-black text-white font-bold py-4 rounded-xl hover:bg-zinc-800 disabled:opacity-50"
-              >
-                {status === "sending" ? "SENDING..." : "SEND RESERVATION 🎃"}
-              </button>
-              {status === "error" && <p className="text-red-600 text-sm text-center">Failed - try again or email Jfreeman@siwdinc.net</p>}
-            </form>
-          )}
-        </div>
-      </section>
 
-      <footer className="relative z-10 text-center py-8 text-zinc-600 text-sm">
-        SIWD Foundation Inc. • Supporting Individuals with Disabilities
-      </footer>
+            <ul className="mt-6 flex-1 space-y-3">
+              {VOLUNTEER_ROLES.map((role) => (
+                <li
+                  key={role.title}
+                  className="rounded-lg border-l-4 bg-white px-5 py-3.5"
+                  style={{ borderColor: ORANGE }}
+                >
+                  <p className="font-display text-[17px] font-bold">{role.title}</p>
+                  <p className="mt-1 text-[15px] leading-relaxed opacity-80">{role.body}</p>
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              asChild
+              size="lg"
+              className="mt-7 w-full text-white hover:opacity-90"
+              style={{ backgroundColor: DEEP_ORANGE }}
+            >
+              <Link href="/volunteer">Sign Up to Volunteer</Link>
+            </Button>
+          </div>
+
+          {/* ---- donate ---- */}
+          <div className="flex h-full flex-col rounded-2xl bg-white/70 p-7 sm:p-8">
+            <h2
+              className="break-words font-display text-2xl font-extrabold uppercase leading-tight tracking-tight sm:text-3xl"
+              style={{ color: DEEP_ORANGE }}
+            >
+              Help Us Keep This Event FREE for Everyone!
+            </h2>
+            <p className="mt-4 text-[17px] leading-relaxed">
+              Every family walks in free, which is only possible because of donors. Any amount helps
+              — here is what each level covers.
+            </p>
+
+            <ul className="mt-6 flex-1 space-y-3">
+              {TIERS.map((tier) => (
+                <li
+                  key={tier.amount}
+                  className="flex items-center gap-4 rounded-lg bg-white px-5 py-4"
+                >
+                  <span
+                    className="grid h-14 w-14 shrink-0 place-items-center rounded-full font-display text-lg font-extrabold text-white"
+                    style={{ backgroundColor: ORANGE }}
+                  >
+                    {tier.amount}
+                  </span>
+                  <span className="text-[15px] leading-relaxed">{tier.body}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              asChild
+              size="lg"
+              className="mt-7 w-full text-white hover:opacity-90"
+              style={{ backgroundColor: DEEP_ORANGE }}
+            >
+              <Link href="/projects#donate">Donate to Our Cause</Link>
+            </Button>
+            <p className="mt-3 text-center text-sm opacity-75">{SITE.taxNote}</p>
+          </div>
+        </div>
+
+        <p className="mt-10 text-center text-[17px]">
+          Questions? Call{' '}
+          <a href={SITE.phoneHref} className="font-bold underline underline-offset-4">
+            {SITE.phone}
+          </a>{' '}
+          or email{' '}
+          <a href={`mailto:${SITE.email}`} className="font-bold underline underline-offset-4">
+            {SITE.email}
+          </a>
+        </p>
+      </section>
     </div>
   );
 }

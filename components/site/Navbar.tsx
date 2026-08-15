@@ -7,12 +7,14 @@ import { useEffect, useState } from 'react';
 import { Menu, X, Heart, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ALL_ROUTES, PRIMARY_NAV, SITE } from '@/lib/site';
+import { useEasterEgg } from '@/components/site/EasterEgg';
 import { cn } from '@/lib/utils';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const pathname = usePathname();
+  const { setShowEasterEgg } = useEasterEgg();
 
   useEffect(() => {
     setOpen(false);
@@ -47,7 +49,15 @@ export default function Navbar() {
           aria-label="Main navigation"
           className="mx-auto flex h-20 max-w-section items-center justify-between gap-3 px-4 lg:px-8"
         >
-          <Link href="/" className="flex min-w-0 items-center gap-3">
+          {/* Double-click the logo to reveal the SIWD Inc coin at the bottom of the page. */}
+          <Link
+            href="/"
+            onDoubleClick={(e) => {
+              e.preventDefault();
+              setShowEasterEgg(true);
+            }}
+            className="flex min-w-0 select-none items-center gap-3"
+          >
             <Image
               src="/images/logo-siwd.png"
               alt="SIWD Foundation logo"

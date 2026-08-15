@@ -12,12 +12,6 @@ export const metadata: Metadata = {
 
 const GALLERY = [
   {
-    src: '/images/community-fair-friends.jpg',
-    alt: 'Ben Lloyd and friends together at a local fair, smiling in front of a fairground ride.',
-    caption: 'Ben Lloyd & Friends',
-    span: 'sm:col-span-2',
-  },
-  {
     src: '/images/event-softball-batter.jpg',
     alt: 'An SIWD athlete at bat under the floodlights during an evening softball game.',
     caption: 'Softball night',
@@ -40,12 +34,6 @@ const GALLERY = [
     alt: 'Mary Frances Vest with her son Christopher Vest and family at a community charity run.',
     caption: 'The Vest family',
     span: '',
-  },
-  {
-    src: '/images/photo-album-banner.jpg',
-    alt: 'A wide view of an SIWD community event at the ballfield in the evening.',
-    caption: 'Community events',
-    span: 'sm:col-span-2',
   },
 ];
 

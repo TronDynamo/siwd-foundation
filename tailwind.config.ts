@@ -47,12 +47,19 @@ const config: Config = {
       },
       borderRadius: { lg: '0.75rem', xl: '1rem', '2xl': '1.25rem' },
       keyframes: {
+        'egg-spin': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
         'fade-up': {
           from: { opacity: '0', transform: 'translateY(12px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
       },
-      animation: { 'fade-up': 'fade-up 0.5s cubic-bezier(0.22,1,0.36,1) both' },
+      animation: {
+        'fade-up': 'fade-up 0.5s cubic-bezier(0.22,1,0.36,1) both',
+        'egg-spin': 'egg-spin 0.7s cubic-bezier(0.4,0,0.2,1) 1',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Manrope, Inter } from 'next/font/google';
 import Navbar from '@/components/site/Navbar';
 import Footer from '@/components/site/Footer';
+import { EasterEggProvider } from '@/components/site/EasterEgg';
 import { SITE } from '@/lib/site';
 import './globals.css';
 
@@ -25,9 +26,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${manrope.variable} ${inter.variable}`}>
       <body className="bg-white font-sans text-brand-900 antialiased">
-        <Navbar />
-        <main id="main">{children}</main>
-        <Footer />
+        <EasterEggProvider>
+          <Navbar />
+          <main id="main">{children}</main>
+          <Footer />
+        </EasterEggProvider>
       </body>
     </html>
   );

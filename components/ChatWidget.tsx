@@ -1,6 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import {
+  ORG,
+  findTopic,
+  describeTopic,
+  findNavTarget,
+  checkNotOnSite,
+} from '@/lib/chat-knowledge';
 
 /* ==================================================================
    SIWD Assistant — floating chat widget.
@@ -9,42 +17,33 @@ import { useEffect, useRef, useState } from 'react';
    <style> block. Nothing here touches page layout, spacing or colours.
    ================================================================== */
 
+/* Kept for the /api/chat payload. Detail lives in lib/chat-knowledge.ts,
+   which is generated from the real page content. */
 const SITE_KNOWLEDGE = {
-  address: '95129 Springhill Rd, Fernandina Beach, FL 32034',
-  map: 'https://www.google.com/maps/search/?api=1&query=95129+Springhill+Rd+Fernandina+Beach+FL+32034',
-  phone: '(904) 507-9976',
-  email: 'Jfreeman@siwdinc.net',
-  boss: 'Larry Vest - The Boss',
-  manager: 'Jessica Freeman - Manager, main contact Jfreeman@siwdinc.net',
-  founder: 'Mary Frances Vest - Founded 2020',
-  programs: [
-    'Online Classes',
-    'In-Person Classes',
-    'Resource Navigation',
-    'Community Events',
-    'Accessible Community Garden with LJ Farms',
-  ],
-  training: ['CPR/AED & First Aid', 'Instructor Course', 'HIV/BBP Course', 'Book Online'],
-  events: ['Halloween Bash', 'Holiday Outreach (200 families)', 'Community Workdays'],
-  resources: [
-    'APD',
-    'Disability Rights Florida',
-    'AHCA',
-    'CMS',
-    'Qlarant',
-    'Social Security',
-    'The Arc Nassau',
-  ],
-  nonprofit: '501(c)(3) Nonprofit, Licensed State of Florida, Insured Fully covered, © 2026',
+  address: ORG.address,
+  map: ORG.map,
+  phone: ORG.phone,
+  email: ORG.email,
+  boss: ORG.boss,
+  manager: ORG.manager,
+  founder: ORG.founder,
+  hours: ORG.hours,
+  serviceArea: ORG.serviceArea,
+  nonprofit: ORG.credentials,
 };
 
-type Message = { role: 'bot' | 'user'; text: string };
+type Message = {
+  role: 'bot' | 'user';
+  text: string;
+  link?: { label: string; href: string };
+};
 
 const QUICK_REPLIES = [
+  'What is the Halloween Bash?',
+  'When is the Halloween Bash?',
   'Where are you located?',
-  'What time is it?',
-  'Who is the boss?',
   'What programs do you offer?',
+  'Take me to Training',
 ];
 
 export default function ChatWidget() {
@@ -54,7 +53,7 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'bot',
-      text: "Hi! I'm SIWD Assistant. I know everything about our site and I can chat about anything. Ask me where we are, our programs, the time, or just say hi!",
+      text: "Hi! I'm SIWD Assistant. I know every event, program and course on this site. Ask me what something is, where it is, or when it runs — or say \"take me to Programs\" and I'll get you there.",
     },
   ]);
   const [input, setInput] = useState('');
@@ -99,41 +98,65 @@ export default function ChatWidget() {
       timeZoneName: 'short',
     });
 
-  const answer = async (q: string): Promise<string> => {
+  const answer = async (
+    q: string
+  ): Promise<{ text: string; link?: { label: string; href: string } }> => {
     const lower = q.toLowerCase();
 
-    if (lower.includes('time'))
-      return `It's ${getTime()} in Fernandina Beach, FL right now.`;
-    if (lower.includes('boss') || lower.includes('larry'))
-      return `${SITE_KNOWLEDGE.boss} is the boss at SIWD Foundation Inc.`;
-    if (lower.includes('jessica') || lower.includes('manager'))
-      return `${SITE_KNOWLEDGE.manager}. Phone ${SITE_KNOWLEDGE.phone}`;
-    if (lower.includes('where') || lower.includes('address') || lower.includes('located'))
-      return `We are at ${SITE_KNOWLEDGE.address}. Map: ${SITE_KNOWLEDGE.map}`;
-    if (lower.includes('phone') || lower.includes('call'))
-      return `Call us at ${SITE_KNOWLEDGE.phone}`;
-    if (lower.includes('email') || lower.includes('contact'))
-      return `Email ${SITE_KNOWLEDGE.email} — that's Jessica Freeman, our manager.`;
-    if (lower.includes('program'))
-      return `Programs: ${SITE_KNOWLEDGE.programs.join(', ')}`;
-    if (lower.includes('training') || lower.includes('cpr'))
-      return `Training: ${SITE_KNOWLEDGE.training.join(', ')}. Book online on our Training page.`;
-    if (lower.includes('event') || lower.includes('halloween') || lower.includes('holiday'))
-      return `Events: ${SITE_KNOWLEDGE.events.join(', ')}`;
-    if (lower.includes('resource'))
-      return `Resources: ${SITE_KNOWLEDGE.resources.join(', ')} — see our Community Resources grid.`;
-    if (lower.includes('founder') || lower.includes('mary'))
-      return `${SITE_KNOWLEDGE.founder}`;
-    if (lower.includes('nonprofit') || lower.includes('501') || lower.includes('ein'))
-      return `${SITE_KNOWLEDGE.nonprofit}`;
-    if (lower.includes('volunteer'))
-      return `We would love the help. Head to our Volunteer page to sign up, or email ${SITE_KNOWLEDGE.email}`;
-    if (lower.includes('donate'))
-      return `Thank you! Our Donate buttons go to the Contact page. Donations are tax-deductible — ${SITE_KNOWLEDGE.nonprofit}`;
-    if (lower.includes('joke'))
-      return 'Why did the tree go to the support group? It needed to branch out. Want to hear about our programs?';
+    /* 1 — explicit navigation: "take me to programs" */
+    const nav = findNavTarget(q);
+    if (nav) {
+      return {
+        text: `Sure — here's ${nav.label}. Tap the button below and I'll take you straight there.`,
+        link: { label: `Take me to ${nav.label}`, href: nav.href },
+      };
+    }
 
-    // fall through to the API route for general conversation
+    /* 2 — people and org facts */
+    if (lower.includes('what time') || /\btime\b/.test(lower))
+      return { text: `It's ${getTime()} in Fernandina Beach, FL right now.` };
+    if (lower.includes('boss') || lower.includes('larry'))
+      return { text: `${ORG.boss} is the boss at ${ORG.name}` };
+    if (lower.includes('jessica') || lower.includes('manager'))
+      return {
+        text: `${ORG.manager}. Email ${ORG.email} or call ${ORG.phone}`,
+        link: { label: 'Take me to Contact', href: '/contact' },
+      };
+    if (lower.includes('founder') || lower.includes('mary') || lower.includes('frances'))
+      return { text: ORG.founder };
+    if (lower.includes('hour') || lower.includes('open'))
+      return { text: `${ORG.hours} Call ${ORG.phone} to arrange a time.` };
+    if (lower.includes('phone') || lower.includes('call'))
+      return { text: `Call us at ${ORG.phone}` };
+    if (lower.includes('email'))
+      return { text: `Email ${ORG.email} — that's Jessica Freeman, our manager.` };
+
+    /* 3 — decline honestly for events we do not actually run */
+    const notHere = checkNotOnSite(q);
+    if (notHere) {
+      return { text: notHere, link: { label: 'Take me to Events', href: '/events' } };
+    }
+
+    /* 4 — anything on the site: what / where / when */
+    const topic = findTopic(q);
+    if (topic) {
+      return {
+        text: describeTopic(topic, q),
+        link: topic.href ? { label: topic.linkLabel ?? 'Take me there', href: topic.href } : undefined,
+      };
+    }
+
+    /* 5 — bare address questions with no topic attached */
+    if (lower.includes('where') || lower.includes('address') || lower.includes('located'))
+      return {
+        text: `We are at ${ORG.address}. We serve ${ORG.serviceArea}.\nMap: ${ORG.map}`,
+        link: { label: 'Take me to Contact', href: '/contact' },
+      };
+
+    if (lower.includes('joke'))
+      return { text: 'Why did the tree go to the support group? It needed to branch out. Want to hear about our programs?' };
+
+    /* 6 — general conversation via the API route */
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -141,9 +164,11 @@ export default function ChatWidget() {
         body: JSON.stringify({ message: q, time: getTime(), site: SITE_KNOWLEDGE }),
       });
       const data = await res.json();
-      return data.reply as string;
+      return { text: data.reply as string };
     } catch {
-      return `I'm here to help! For SIWD info: ${SITE_KNOWLEDGE.address}, ${SITE_KNOWLEDGE.phone}, ${SITE_KNOWLEDGE.email}. For general chat, ask me anything!`;
+      return {
+        text: `I'm here to help! For SIWD info: ${ORG.address}, ${ORG.phone}, ${ORG.email}. Ask me about any event, program or course on the site.`,
+      };
     }
   };
 
@@ -158,7 +183,7 @@ export default function ChatWidget() {
     const reply = await answer(userMsg);
 
     setIsThinking(false);
-    setMessages((m) => [...m, { role: 'bot', text: reply }]);
+    setMessages((m) => [...m, { role: 'bot', text: reply.text, link: reply.link }]);
   };
 
   return (
@@ -236,6 +261,16 @@ export default function ChatWidget() {
                 } max-w-[80%] whitespace-pre-wrap break-words rounded-2xl p-3 text-sm shadow-sm`}
               >
                 {m.text}
+                {m.link && (
+                  <Link
+                    href={m.link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#dc2626] px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90"
+                  >
+                    {m.link.label}
+                    <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                )}
               </div>
             ))}
 

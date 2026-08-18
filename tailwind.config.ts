@@ -47,6 +47,28 @@ const config: Config = {
       },
       borderRadius: { lg: '0.75rem', xl: '1rem', '2xl': '1.25rem' },
       keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'pumpkin-glow': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.82' },
+        },
+        flicker: {
+          '0%, 100%': { opacity: '1' },
+          '35%': { opacity: '0.8' },
+          '55%': { opacity: '0.95' },
+          '75%': { opacity: '0.85' },
+        },
+        'bat-fly': {
+          from: { transform: 'translateX(-100px)' },
+          to: { transform: 'translateX(110vw)' },
+        },
+        'wing-flap': {
+          '0%, 100%': { transform: 'scaleY(1)' },
+          '50%': { transform: 'scaleY(0.5)' },
+        },
         'egg-spin': {
           from: { transform: 'rotate(0deg)' },
           to: { transform: 'rotate(360deg)' },
@@ -57,6 +79,11 @@ const config: Config = {
         },
       },
       animation: {
+        float: 'float 3s ease-in-out infinite',
+        'pumpkin-glow': 'pumpkin-glow 2s ease-in-out infinite',
+        flicker: 'flicker 1.6s ease-in-out infinite',
+        'bat-fly': 'bat-fly 20s linear infinite',
+        'wing-flap': 'wing-flap 0.2s ease-in-out infinite',
         'fade-up': 'fade-up 0.5s cubic-bezier(0.22,1,0.36,1) both',
         'egg-spin': 'egg-spin 0.7s cubic-bezier(0.4,0,0.2,1) 1',
       },

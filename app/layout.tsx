@@ -3,6 +3,7 @@ import { Manrope, Inter } from 'next/font/google';
 import Navbar from '@/components/site/Navbar';
 import Footer from '@/components/site/Footer';
 import { EasterEggProvider } from '@/components/site/EasterEgg';
+import ChatWidget from '@/components/ChatWidget';
 import { SITE } from '@/lib/site';
 import './globals.css';
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main id="main">{children}</main>
           <Footer />
         </EasterEggProvider>
+        <ChatWidget />
       </body>
     </html>
   );

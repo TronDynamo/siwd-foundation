@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { MapPin, Phone, Mail, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import { MapPin, Phone, Mail } from 'lucide-react';
 import ResourceLinks from '@/components/site/ResourceLinks';
+import ContactForm from '@/components/site/ContactForm';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -109,41 +106,7 @@ export default function ContactPage() {
                 Leave us a message and we&rsquo;ll get back to you.
               </h2>
 
-              <form action={SITE.formspree} method="POST" className="mt-8 space-y-6">
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" name="firstName" type="text" autoComplete="given-name" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" name="lastName" type="text" autoComplete="family-name" required />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">
-                    Email <span aria-hidden="true" className="text-accent-500">*</span>
-                    <span className="sr-only">(required)</span>
-                  </Label>
-                  <Input id="email" name="email" type="email" autoComplete="email" required />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Input id="subject" name="subject" type="text" />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message">Type your message here...</Label>
-                  <Textarea id="message" name="message" placeholder="Type your message here..." required />
-                </div>
-
-                <Button type="submit" size="lg">
-                  <Send className="h-4 w-4" aria-hidden="true" />
-                  Submit
-                </Button>
-              </form>
+              <ContactForm />
             </div>
           </div>
         </div>

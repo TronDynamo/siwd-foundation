@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import ResourceLinks from '@/components/site/ResourceLinks';
@@ -502,7 +501,7 @@ export default function GalleryPage() {
             Our SIWD Family &amp; Events
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-brand-900/70">
-            Welcome to an INSIDE look of our Family and Events :) Click the image below to see more.
+            Welcome to an INSIDE look of our Family and Events :) Scroll down to see images.
           </p>
         </div>
       </section>
@@ -513,13 +512,12 @@ export default function GalleryPage() {
             {GALLERY.map((g) => (
               <figure key={g.src} className={`group overflow-hidden rounded-2xl bg-white shadow-sm ${g.span}`}>
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={g.src}
                     alt={g.alt}
-                    fill
                     loading="lazy"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
-                    className="rounded-t-2xl object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full rounded-t-2xl object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
                 <figcaption className="p-5 font-display text-[15px] font-semibold text-brand-800">{g.caption}</figcaption>

@@ -233,7 +233,7 @@ export default function HalloweenBashPage() {
               className="mt-7 w-full text-white hover:opacity-90"
               style={{ backgroundColor: DEEP_ORANGE }}
             >
-              <Link href="/contact">Donate to Our Cause</Link>
+              <Link href="https://www.zeffy.com/en-US/donation-form/siwd-foundation-halloween-bash" target="_blank" rel="noopener noreferrer">Donate to Our Cause</Link>
             </Button>
             <p className="mt-3 text-center text-sm opacity-75">{SITE.taxNote}</p>
           </div>

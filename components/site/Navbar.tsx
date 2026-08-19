@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation";
 import { Heart, ChevronDown, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PRIMARY_NAV, MORE_ROUTES, ALL_ROUTES, SITE } from "@/lib/site";
+import { PRIMARY_NAV, ALL_ROUTES, SITE } from "@/lib/site";
+const MORE_ROUTES = ALL_ROUTES.filter(r => !PRIMARY_NAV.some(p => p.href === r.href));
 
 export function Navbar() {
   const [open, setOpen] = useState(false);

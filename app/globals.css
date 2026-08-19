@@ -18,6 +18,124 @@
 --color-accent-400: #facc15;
 }
 
+/* ------------------------------------------------------------------
+   Design tokens recovered after the Tailwind v3 -> v4 migration.
+
+   Tailwind v4 does NOT read tailwind.config.ts unless an @config
+   directive is present, and there isn't one. Everything the old
+   config defined therefore stopped generating utilities: the layout
+   widths, shadows, display font, hairline borders and the Halloween
+   animations. The markup still references all of them, so those
+   classes were silently producing nothing.
+
+   Values below are the originals from tailwind.config.ts. The brand
+   colours above are left exactly as they are - those are yours.
+   ------------------------------------------------------------------ */
+@theme {
+  /* used by text-accent-500 (required-field asterisks), bg-accent-500
+     (price badges - white text, so this must stay dark) and
+     text-accent-600 (section headings, course prices) */
+  --color-accent-500: #b8353b;
+  --color-accent-600: #9c2a30;
+
+  /* border-hairline / ring-hairline - 16 files */
+  --color-hairline: #e8e5e1;
+  --color-sand: #f5efe8;
+
+  /* font-display - 25 files. The CSS variables come from next/font
+     in app/layout.tsx, which already sets them on <html>. */
+  --font-display: var(--font-manrope), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+
+  /* max-w-content - 16 files. Without this every page section runs the
+     full width of the viewport, which is the "mashed text" symptom. */
+  --container-content: 1200px;
+  --container-section: 1440px;
+
+  /* shadow-soft - 3 files, shadow-lift - 10 files */
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lift: 0 12px 40px rgba(11, 47, 74, 0.12);
+
+  /* Halloween Bash animations (GlowingPumpkin.tsx, FlyingBats.tsx)
+     and the logo easter egg */
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pumpkin-glow: pumpkin-glow 2s ease-in-out infinite;
+  --animate-flicker: flicker 1.6s ease-in-out infinite;
+  --animate-bat-fly: bat-fly 20s linear infinite;
+  --animate-wing-flap: wing-flap 0.2s ease-in-out infinite;
+  --animate-egg-spin: egg-spin 0.7s cubic-bezier(0.4, 0, 0.2, 1) 1;
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes pumpkin-glow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.82;
+    }
+  }
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    35% {
+      opacity: 0.8;
+    }
+    55% {
+      opacity: 0.95;
+    }
+    75% {
+      opacity: 0.85;
+    }
+  }
+  @keyframes bat-fly {
+    from {
+      transform: translateX(-100px);
+    }
+    to {
+      transform: translateX(110vw);
+    }
+  }
+  @keyframes wing-flap {
+    0%,
+    100% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(0.5);
+    }
+  }
+  @keyframes egg-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -33,6 +151,16 @@
   body {
     background: hsl(var(--background));
     color: hsl(var(--foreground));
+  }
+  /* respect users who ask for less motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 

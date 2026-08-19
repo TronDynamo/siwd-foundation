@@ -1,46 +1,28 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Menu, X, Heart, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ALL_ROUTES, PRIMARY_NAV, SITE } from '@/lib/site';
-import { useEasterEgg } from '@/components/site/EasterEgg';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { Heart, ChevronDown, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { PRIMARY_NAV, MORE_ROUTES, ALL_ROUTES, SITE } from "@/lib/site";
 
-export default function Navbar() {
+export function Navbar() {
   const [open, setOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
   const pathname = usePathname();
-  const { setShowEasterEgg } = useEasterEgg();
 
-  useEffect(() => {
-    setOpen(false);
-    setMoreOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
-
-  const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
-
-  // Routes not shown in the condensed desktop bar live under "More".
-  const primaryHrefs = new Set(PRIMARY_NAV.map((r) => r.href));
-  const moreRoutes = ALL_ROUTES.filter((r) => !primaryHrefs.has(r.href));
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname?.startsWith(href);
+  };
 
   return (
     <>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2.5 focus:font-display focus:text-sm focus:font-semibold focus:text-blue-800 focus:shadow-lift"
-      >
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-blue-700 focus:px-4 focus:py-2 focus:text-white">
         Skip to content
       </a>
 
@@ -70,7 +52,7 @@ export default function Navbar() {
               <span className="block truncate font-display text-base font-bold tracking-tight text-blue-800 sm:text-lg">
                 SIWD Foundation
               </span>
-              <span className="hidden text-[10px] font-semibold uppercase tracking-[0.09em] text-teal-600 sm:block">
+              <span className="hidden text- font-semibold uppercase tracking-[0.09em] text-teal-600 sm:block">
                 501(c)(3) Nonprofit
               </span>
             </span>
@@ -82,10 +64,10 @@ export default function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  aria-current={isActive(item.href)? 'page' : undefined}
                   className={cn(
-                    'rounded-full px-3.5 py-2 text-[15px] transition-colors hover:bg-blue-50 hover:text-blue-800',
-                    isActive(item.href) ? 'font-semibold text-blue-800' : 'text-brand-900/75'
+                    'rounded-full px-3.5 py-2 text- transition-colors hover:bg-blue-50 hover:text-blue-800',
+                    isActive(item.href)? 'font-semibold text-blue-800' : 'text-brand-900/75'
                   )}
                 >
                   {item.label}
@@ -101,9 +83,9 @@ export default function Navbar() {
             >
               <button
                 type="button"
-                onClick={() => setMoreOpen((v) => !v)}
+                onClick={() => setMoreOpen((v) =>!v)}
                 aria-expanded={moreOpen}
-                className="flex items-center gap-1 rounded-full px-3.5 py-2 text-[15px] text-brand-900/75 transition-colors hover:bg-blue-50 hover:text-blue-800"
+                className="flex items-center gap-1 rounded-full px-3.5 py-2 text- text-brand-900/75 transition-colors hover:bg-blue-50 hover:text-blue-800"
               >
                 More
                 <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -111,14 +93,14 @@ export default function Navbar() {
 
               {moreOpen && (
                 <ul className="absolute right-0 top-full z-50 w-64 rounded-xl border border-hairline bg-white p-2 shadow-lift">
-                  {moreRoutes.map((item) => (
+                  {MORE_ROUTES.map((item) => (
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        aria-current={isActive(item.href) ? 'page' : undefined}
+                        aria-current={isActive(item.href)? 'page' : undefined}
                         className={cn(
-                          'block rounded-lg px-3.5 py-2.5 text-[15px] transition-colors hover:bg-blue-50 hover:text-blue-800',
-                          isActive(item.href) ? 'font-semibold text-blue-800' : 'text-brand-900/75'
+                          'block rounded-lg px-3.5 py-2.5 text- transition-colors hover:bg-blue-50 hover:text-blue-800',
+                          isActive(item.href)? 'font-semibold text-blue-800' : 'text-brand-900/75'
                         )}
                       >
                         {item.label}
@@ -131,7 +113,8 @@ export default function Navbar() {
           </ul>
 
           <div className="flex shrink-0 items-center gap-2.5">
-            <Button asChild variant="donate" size="sm" className="hidden sm:inline-flex">
+            {/* FIXED: RED DONATE - TOP RIGHT */}
+            <Button asChild size="sm" className="inline-flex bg-red-600 text-white font-bold hover:bg-red-700 shadow-sm">
               <Link href="/contact">
                 <Heart className="h-4 w-4" aria-hidden="true" />
                 Donate
@@ -140,19 +123,19 @@ export default function Navbar() {
 
             <button
               type="button"
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => setOpen((v) =>!v)}
               aria-expanded={open}
               aria-controls="mobile-menu"
-              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-label={open? 'Close menu' : 'Open menu'}
               className="grid h-11 w-11 place-items-center rounded-xl border border-hairline text-blue-800 transition-colors hover:bg-blue-50 xl:hidden"
             >
-              {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+              {open? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </button>
           </div>
         </nav>
       </header>
 
-      {/* mobile — every one of the 15 routes */}
+      {/* mobile - every one of the 15 routes */}
       {open && (
         <div id="mobile-menu" className="fixed inset-0 z-40 flex flex-col bg-white pt-20 xl:hidden">
           <ul className="flex-1 overflow-y-auto px-4 py-4">
@@ -160,10 +143,11 @@ export default function Navbar() {
               <li key={item.href} className="border-b border-hairline last:border-0">
                 <Link
                   href={item.href}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  aria-current={isActive(item.href)? 'page' : undefined}
+                  onClick={() => setOpen(false)}
                   className={cn(
                     'block py-3.5 font-display text-lg font-semibold transition-colors hover:text-blue-700',
-                    isActive(item.href) ? 'text-blue-700' : 'text-brand-900'
+                    isActive(item.href)? 'text-blue-700' : 'text-brand-900'
                   )}
                 >
                   {item.label}
@@ -173,14 +157,15 @@ export default function Navbar() {
           </ul>
 
           <div className="space-y-3 border-t border-hairline px-4 py-5">
-            <Button asChild variant="donate" className="w-full">
-              <Link href="/contact">
+            {/* FIXED: RED DONATE - MOBILE BOTTOM */}
+            <Button asChild className="w-full bg-red-600 text-white font-bold hover:bg-red-700">
+              <Link href="/contact" onClick={() => setOpen(false)}>
                 <Heart className="h-4 w-4" aria-hidden="true" />
                 Donate
               </Link>
             </Button>
             <p className="text-center text-xs text-brand-900/55">{SITE.taxNote}</p>
-            <a href={SITE.phoneHref} className="block text-center text-[15px] text-blue-700">
+            <a href={SITE.phoneHref} className="block text-center text- text-blue-700">
               {SITE.phone}
             </a>
           </div>

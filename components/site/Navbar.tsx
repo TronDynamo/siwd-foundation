@@ -38,8 +38,9 @@ export function Navbar() {
             onDoubleClick={(e) => {
               e.preventDefault();
               setShowEasterEgg(true);
+              window.dispatchEvent(new CustomEvent('open-siwd-coin'));
             }}
-            className="flex min-w-0 select-none items-center gap-3"
+            className="flex min-w-0 cursor-pointer select-none items-center gap-3"
           >
             <Image
               src="/images/logo-siwd.png"

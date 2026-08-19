@@ -4,6 +4,7 @@ import Navbar from '@/components/site/Navbar';
 import Footer from '@/components/site/Footer';
 import { EasterEggProvider } from '@/components/site/EasterEgg';
 import ChatWidget from '@/components/ChatWidget';
+import { SiwdCoinPopup } from '@/components/SiwdCoinPopup';
 import { SITE } from '@/lib/site';
 import './globals.css';
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
         </EasterEggProvider>
         <ChatWidget />
+        <SiwdCoinPopup />
       </body>
     </html>
   );
